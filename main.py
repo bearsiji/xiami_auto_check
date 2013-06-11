@@ -1,3 +1,6 @@
+#!/usr/bin/python
+#coding:utf-8
+
 import mechanize
 import re 
 
@@ -7,11 +10,17 @@ br.addheaders = [('User-agent', 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.
 
 url=u"http://www.xiami.com/web/login"
       
-r=br.open(url)
+br.open(url)
 
 br.select_form(nr=0)
 br["email"]="your email"
-br["password"]="you password"
-response=br.submit() 
-for link in br.links(url_regex=re.compile("/web/checkin/id/")):
-    br.follow_link(link)
+br["password"]="your password"
+br.submit()
+
+for link in br.links():
+    if r"首页" in link.text:
+        br.follow_link(link)
+
+for sec_link in br.links():
+    if r"每日签到" in sec_link.text:
+        br.follow_link(sec_link)
